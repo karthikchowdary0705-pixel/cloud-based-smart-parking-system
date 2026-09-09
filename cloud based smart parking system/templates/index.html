@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cloud Smart Parking System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <h1>🚗 Smart Parking System</h1>
+    <p>Cloud-Based Smart Parking Management</p>
+</header>
+
+
+<div class="container">
+
+    {% if message %}
+    <div class="message">
+        {{ message }}
+    </div>
+    {% endif %}
+
+
+    <!-- Dashboard -->
+
+    <div class="dashboard">
+
+        <div class="stat total">
+            <h2>{{ total }}</h2>
+            <p>Total Slots</p>
+        </div>
+
+        <div class="stat available">
+            <h2>{{ available }}</h2>
+            <p>Available</p>
+        </div>
+
+        <div class="stat occupied">
+            <h2>{{ occupied }}</h2>
+            <p>Occupied</p>
+        </div>
+
+    </div>
+
+
+    <!-- Reserve Parking -->
+
+    <div class="card">
+
+        <h2>🅿️ Reserve Parking Slot</h2>
+
+        <form action="/reserve" method="POST">
+
+            <select name="slot_number" required>
+
+                <option value="">
+                    Select Available Slot
+                </option>
+
+                {% for slot in slots %}
+
+                    {% if slot[2] == "Available" %}
+
+                    <option value="{{ slot[1] }}">
+                        {{ slot[1] }}
+                    </option>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </select>
+
+
+            <input
+                type="text"
+                name="vehicle_number"
+                placeholder="Vehicle Number"
+                required
+            >
+
+
+            <input
+                type="text"
+                name="owner_name"
+                placeholder="Owner Name"
+                required
+            >
+
+
+            <button type="submit">
+                Reserve Slot
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Parking Slots -->
+
+    <div class="card">
+
+        <h2>🚘 Parking Slots</h2>
+
+        <div class="parking-grid">
+
+            {% for slot in slots %}
+
+            <div class="parking-slot
+                {% if slot[2] == 'Available' %}
+                    available-slot
+                {% else %}
+                    occupied-slot
+                {% endif %}
+            ">
+
+                <h3>{{ slot[1] }}</h3>
+
+
+                {% if slot[2] == "Available" %}
+
+                    <p>🟢 Available</p>
+
+                {% else %}
+
+                    <p>🔴 Occupied</p>
+
+                    <p>
+                        <strong>Vehicle:</strong>
+                        {{ slot[3] }}
+                    </p>
+
+                    <p>
+                        <strong>Owner:</strong>
+                        {{ slot[4] }}
+                    </p>
+
+                    <p>
+                        <strong>Entry:</strong>
+                        {{ slot[5] }}
+                    </p>
+
+
+                    <a
+                        href="/release/{{ slot[0] }}"
+                        class="release"
+                        onclick="return confirm('Release this parking slot?')"
+                    >
+                        Release Slot
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Cloud Computing -->
+
+    <div class="card cloud">
+
+        <h2>☁️ Cloud Computing Features</h2>
+
+        <p>
+            This project demonstrates a cloud-based
+            smart parking management system.
+        </p>
+
+        <p>
+            Parking information can be stored and managed
+            through a web-based cloud application.
+        </p>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    <p>
+        Cloud-Based Smart Parking System © 2026
+    </p>
+
+</footer>
+
+</body>
+
+</html>
